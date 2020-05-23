@@ -42,17 +42,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        //Map fragment stuff
         mMapView = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mMapView.onCreate(savedInstanceState);
-
         mMapView.onResume();
-
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        //hide FAB
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         fab.hide();
 
@@ -78,7 +78,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         super.onDestroy();
         mMapView.onDestroy();
     }
-
+    
     @Override
     public void onMapReady(GoogleMap gmap) {
         googleMap = gmap;
