@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.*;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,17 +53,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             e.printStackTrace();
         }
 
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.hide();
+
         mMapView.getMapAsync(this);
 
-
-
-        //final TextView textView = root.findViewById(R.id.text_home);
-//        mapViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
         return root;
     }
 
@@ -87,10 +82,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap gmap) {
         googleMap = gmap;
-
+        final float zoomLevel = (float) 15.0;
         LatLng ucsb = new LatLng(34.412936, -119.847863);
         googleMap.addMarker(new MarkerOptions().position(ucsb)
                 .title("Marker in IV"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ucsb));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsb, zoomLevel));
+
+
     }
 }
