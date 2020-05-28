@@ -82,7 +82,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private static final String KEY_LOCATION = "location";
 
     // Used for selecting the current place.
-    private static final int M_MAX_ENTRIES = 5;
+    private static final int M_MAX_ENTRIES = 10;
     private String[] mLikelyPlaceNames;
     private String[] mLikelyPlaceAddresses;
     private List[] mLikelyPlaceAttributions;
