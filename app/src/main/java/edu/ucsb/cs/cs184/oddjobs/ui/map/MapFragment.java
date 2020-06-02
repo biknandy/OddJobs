@@ -50,6 +50,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -407,7 +408,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         .position(markerLatLng)
                         .snippet(markerSnippet));
 
-                
+
                 // Position the map's camera at the location of the marker.
 //                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
 //                        DEFAULT_ZOOM));
@@ -447,26 +448,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-//        // Retrieve the data from the marker.
-//        Integer clickCount = (Integer) marker.getTag();
+        //grab position of marker and send to arraylist
+        LatLng pos = marker.getPosition();
+        Double latitude = pos.latitude;
+        Double longitude = pos.longitude;
+        ArrayList<String> posArr =  new ArrayList<>();
+        posArr.add(latitude.toString());
+        posArr.add(longitude.toString());
 
-//        // Check if a click count was set, then display the click count.
-//        if (clickCount != null) {
-//            clickCount = clickCount + 1;
-//            marker.setTag(clickCount);
-//            Toast.makeText(getActivity(),
-//                    marker.getTitle() +
-//                            " has been clicked " + clickCount + " times.",
-//                    Toast.LENGTH_SHORT).show();
-//        }
-
-        //start form activity where user can start a request form
+        //start form activity where user can start a request form - send marker location
         Intent i = new Intent(getActivity(), FormActivity.class);
+        i.putStringArrayListExtra("position",posArr);
         startActivityForResult(i, 1);
 
-        // Return false to indicate that we have not consumed the event and that we wish
-        // for the default behavior to occur (which is for the camera to move such that the
-        // marker is centered and for the marker's info window to open, if it has one).
         return true;
     }
 
