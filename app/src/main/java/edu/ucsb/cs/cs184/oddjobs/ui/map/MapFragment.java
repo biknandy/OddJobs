@@ -1,7 +1,9 @@
 package edu.ucsb.cs.cs184.oddjobs.ui.map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -51,9 +53,10 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.ucsb.cs.cs184.oddjobs.FormActivity;
 import edu.ucsb.cs.cs184.oddjobs.R;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback{
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = "TAG";
 
@@ -82,7 +85,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private static final String KEY_LOCATION = "location";
 
     // Used for selecting the current place.
-    private static final int M_MAX_ENTRIES = 10;
+    private static final int M_MAX_ENTRIES = 30;
     private String[] mLikelyPlaceNames;
     private String[] mLikelyPlaceAddresses;
     private List[] mLikelyPlaceAttributions;
@@ -211,6 +214,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             }
         });
 
+        googleMap.setOnMarkerClickListener(this);
+
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -328,7 +333,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     if (task.isSuccessful() && task.getResult() != null) {
                         FindCurrentPlaceResponse likelyPlaces = task.getResult();
 
-                        // Set the count, handling cases where less than 5 entries are returned.
+                        // Set the count, handling cases where less than 30 entries are returned.
                         int count;
                         if (likelyPlaces.getPlaceLikelihoods().size() < M_MAX_ENTRIES) {
                             count = likelyPlaces.getPlaceLikelihoods().size();
@@ -402,9 +407,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                         .position(markerLatLng)
                         .snippet(markerSnippet));
 
+                
                 // Position the map's camera at the location of the marker.
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-                        DEFAULT_ZOOM));
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
+//                        DEFAULT_ZOOM));
             }
         };
 
@@ -434,6 +440,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    /** Called when the user clicks a marker. */
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+
+//        // Retrieve the data from the marker.
+//        Integer clickCount = (Integer) marker.getTag();
+
+//        // Check if a click count was set, then display the click count.
+//        if (clickCount != null) {
+//            clickCount = clickCount + 1;
+//            marker.setTag(clickCount);
+//            Toast.makeText(getActivity(),
+//                    marker.getTitle() +
+//                            " has been clicked " + clickCount + " times.",
+//                    Toast.LENGTH_SHORT).show();
+//        }
+
+        //start form activity where user can start a request form
+        Intent i = new Intent(getActivity(), FormActivity.class);
+        startActivityForResult(i, 1);
+
+        // Return false to indicate that we have not consumed the event and that we wish
+        // for the default behavior to occur (which is for the camera to move such that the
+        // marker is centered and for the marker's info window to open, if it has one).
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1){
+            if(resultCode == Activity.RESULT_OK){
+                String name=data.getStringExtra("name");
+                Log.d("hello", name);
+            }
+
         }
     }
 }
