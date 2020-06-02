@@ -17,6 +17,8 @@ import java.util.List;
 public class FormActivity extends AppCompatActivity {
 
     private EditText nameField;
+    private EditText titleField;
+    private EditText description;
 
     @Override
     protected void onCreate (Bundle savedInstanceState){
@@ -27,10 +29,12 @@ public class FormActivity extends AppCompatActivity {
         nameField = findViewById(R.id.nameField);
 
         //title field (heading of post)
+        titleField = findViewById(R.id.titleField);
 
         //job description
+        description = findViewById(R.id.description);
 
-        //payment or payment
+        //payment
 
         //money stuff
 
