@@ -41,6 +41,8 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -492,6 +494,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 Double payment = data.getDoubleExtra("payment", 0.00);
                 ArrayList<String> position = data.getStringArrayListExtra("position");
 
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("Listing").child("Tim").child(title);
+                ArrayList<String> lister = new ArrayList<>();
+                lister.add(location);
+                lister.add(description);
+                lister.add(payment.toString());
+                lister.add(position.get(0));
+                lister.add(position.get(1));
+                myRef.setValue(lister);
                 //TODO - send this info to firebase
                 Log.d("name", name);
                 Log.d("title", title);
