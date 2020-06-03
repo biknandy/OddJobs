@@ -470,7 +470,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         if (requestCode == 1){
             if(resultCode == Activity.RESULT_OK){
                 String name=data.getStringExtra("name");
-                Log.d("hello", name);
+                String title = data.getStringExtra("title");
+                String description = data.getStringExtra("description");
+                Double payment = data.getDoubleExtra("payment", 0.00);
+                ArrayList<String> position = data.getStringArrayListExtra("position");
+
+                //TODO - send this info to firebase
+                Log.d("name", name);
+                Log.d("title", title);
+                Log.d("desc", description);
+                Log.d("pay", payment.toString());
+                Log.d("pos", position.toString());
             }
 
         }

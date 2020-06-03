@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FormActivity extends AppCompatActivity {
@@ -19,6 +20,7 @@ public class FormActivity extends AppCompatActivity {
     private EditText nameField;
     private EditText titleField;
     private EditText description;
+    private EditText payment;
 
     @Override
     protected void onCreate (Bundle savedInstanceState){
@@ -35,6 +37,7 @@ public class FormActivity extends AppCompatActivity {
         description = findViewById(R.id.description);
 
         //payment
+        payment = findViewById(R.id.paymentField);
 
         //money stuff
 
@@ -42,15 +45,24 @@ public class FormActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v){
                 Intent i = getIntent();
-                List<String> pos = i.getStringArrayListExtra("position");
+                ArrayList<String> pos = i.getStringArrayListExtra("position");
                 Log.d("position", pos.toString());
 
 
                 String nameText = nameField.getText().toString();
                 Log.d("nameText", nameText);
-                Intent personIntent = new Intent();
-                personIntent.putExtra("name", nameText);
-                setResult(Activity.RESULT_OK, personIntent);
+                String titleText = titleField.getText().toString();
+                String descriptionText = description.getText().toString();
+                Double paymentNum = Double.parseDouble(payment.getText().toString());
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("name", nameText);
+                resultIntent.putExtra("title", titleText);
+                resultIntent.putExtra("description", descriptionText);
+                resultIntent.putExtra("payment", paymentNum);
+                resultIntent.putStringArrayListExtra("position", pos);
+
+                setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
         });
