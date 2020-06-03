@@ -46,6 +46,7 @@ public class FormActivity extends AppCompatActivity {
             public void onClick (View v){
                 Intent i = getIntent();
                 ArrayList<String> pos = i.getStringArrayListExtra("position");
+                String loc = i.getStringExtra("loc");
                 Log.d("position", pos.toString());
 
 
@@ -58,6 +59,7 @@ public class FormActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("name", nameText);
                 resultIntent.putExtra("title", titleText);
+                resultIntent.putExtra("location", loc);
                 resultIntent.putExtra("description", descriptionText);
                 resultIntent.putExtra("payment", paymentNum);
                 resultIntent.putStringArrayListExtra("position", pos);

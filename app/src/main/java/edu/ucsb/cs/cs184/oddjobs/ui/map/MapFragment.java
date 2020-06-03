@@ -215,6 +215,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
+        googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
+            @Override
+            public void onPoiClick(PointOfInterest poInterest) {
+                googleMap.addMarker(new MarkerOptions()
+                        .position(poInterest.latLng)
+                        .title(poInterest.name)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+            }
+        });
+
         googleMap.setOnMarkerClickListener(this);
 
         // Prompt the user for permission.
@@ -406,7 +417,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 googleMap.addMarker(new MarkerOptions()
                         .title(mLikelyPlaceNames[which])
                         .position(markerLatLng)
-                        .snippet(markerSnippet));
+                        .snippet(markerSnippet)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
 
                 // Position the map's camera at the location of the marker.
@@ -456,8 +468,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         posArr.add(latitude.toString());
         posArr.add(longitude.toString());
 
+        //get location of marker
+        String loc = marker.getTitle();
+
         //start form activity where user can start a request form - send marker location
         Intent i = new Intent(getActivity(), FormActivity.class);
+        i.putExtra("loc", loc);
         i.putStringArrayListExtra("position",posArr);
         startActivityForResult(i, 1);
 
@@ -471,6 +487,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             if(resultCode == Activity.RESULT_OK){
                 String name=data.getStringExtra("name");
                 String title = data.getStringExtra("title");
+                String location = data.getStringExtra("location");
                 String description = data.getStringExtra("description");
                 Double payment = data.getDoubleExtra("payment", 0.00);
                 ArrayList<String> position = data.getStringArrayListExtra("position");
@@ -481,6 +498,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 Log.d("desc", description);
                 Log.d("pay", payment.toString());
                 Log.d("pos", position.toString());
+                Log.d("loc", location);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //No result - invalid selection
+
             }
 
         }
