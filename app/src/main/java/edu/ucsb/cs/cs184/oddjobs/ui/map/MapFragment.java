@@ -221,7 +221,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 googleMap.addMarker(new MarkerOptions()
                         .position(poInterest.latLng)
                         .title(poInterest.name)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
             }
         });
@@ -418,7 +418,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         .title(mLikelyPlaceNames[which])
                         .position(markerLatLng)
                         .snippet(markerSnippet)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
 
                 // Position the map's camera at the location of the marker.
