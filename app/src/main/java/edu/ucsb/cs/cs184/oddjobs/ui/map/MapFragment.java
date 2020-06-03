@@ -58,6 +58,7 @@ import java.util.List;
 
 import edu.ucsb.cs.cs184.oddjobs.FormActivity;
 import edu.ucsb.cs.cs184.oddjobs.R;
+import edu.ucsb.cs.cs184.oddjobs.SignInActivity;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -495,7 +496,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 ArrayList<String> position = data.getStringArrayListExtra("position");
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Listing").child("Tim").child(title);
+                DatabaseReference myRef = database.getReference("Listing").child(SignInActivity.username).child(title);
                 ArrayList<String> lister = new ArrayList<>();
                 lister.add(location);
                 lister.add(description);
