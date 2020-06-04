@@ -18,23 +18,30 @@ import com.google.firebase.database.ValueEventListener;
 public class SignInActivity extends AppCompatActivity {
     public static String username = "";
     public static String userType = UserTypeActivity.getUserType();
+
+    private EditText user;
+    private EditText pass;
+    private Button signin;
+    private Button createAcc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        Button signin = findViewById(R.id.signin);
+        signin = findViewById(R.id.signin);
+        createAcc = findViewById(R.id.createAccountButt);
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Users");
+                DatabaseReference myRef = database.getReference("users");
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        EditText user = findViewById(R.id.textView4);
-                        EditText pass = findViewById(R.id.editTextTextPassword);
+                        user = findViewById(R.id.textView4);
+                        pass = findViewById(R.id.editTextTextPassword);
                         if (snapshot.hasChild(user.getText().toString()) ) {
                             Log.d("SUCESS",snapshot.child(user.getText().toString()).getValue(String.class));
                             Log.d("SUCESS",pass.getText().toString());
@@ -57,6 +64,14 @@ public class SignInActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        createAcc.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(SignInActivity.this, CreateAccount.class);
+                startActivity(intent);
+            }
         });
 
     }

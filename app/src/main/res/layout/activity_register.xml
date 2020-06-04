@@ -15,23 +15,22 @@
         tools:context=".SignInActivity">
 
         <EditText
-            android:id="@+id/createPassword"
+            android:id="@+id/createName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
 
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
             android:hint="@string/name"
             android:imeOptions="actionDone"
-            android:inputType="textPassword"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/createPass"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -39,12 +38,13 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
             android:hint="Password"
-            android:imeActionLabel="@string/name"
+            android:imeActionLabel="Password"
             android:imeOptions="actionDone"
+            android:inputType="textPassword"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/createName" />
 
         <EditText
             android:id="@+id/phone"
@@ -59,7 +59,7 @@
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintTop_toBottomOf="@+id/createPass" />
 
         <Button
             android:id="@+id/createAccount"
