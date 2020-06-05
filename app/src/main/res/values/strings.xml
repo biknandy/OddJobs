@@ -19,4 +19,9 @@
     <string name="default_info_snippet">No places found, because location permission is disabled.</string>
     <string name="option_get_place">Get place</string>
     <string name="pick_place">Choose a place</string>
+
+    <string name="name">Username</string>
+    <string name="phone">"Phone Number"</string>
+    <string name="create_account">"Create Account"</string>
+    <string name="action_sign_in">Sign in</string>
 </resources>

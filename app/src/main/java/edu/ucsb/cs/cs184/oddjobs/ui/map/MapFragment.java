@@ -1,7 +1,9 @@
 package edu.ucsb.cs.cs184.oddjobs.ui.map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,6 +41,8 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,12 +52,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.ucsb.cs.cs184.oddjobs.FormActivity;
+import edu.ucsb.cs.cs184.oddjobs.Listing;
+import edu.ucsb.cs.cs184.oddjobs.MainActivity;
 import edu.ucsb.cs.cs184.oddjobs.R;
+import edu.ucsb.cs.cs184.oddjobs.SignInActivity;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback{
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = "TAG";
 
@@ -82,11 +91,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private static final String KEY_LOCATION = "location";
 
     // Used for selecting the current place.
-    private static final int M_MAX_ENTRIES = 10;
+    private static final int M_MAX_ENTRIES = 30;
     private String[] mLikelyPlaceNames;
     private String[] mLikelyPlaceAddresses;
     private List[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
+
+    private DatabaseReference db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -211,6 +222,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             }
         });
 
+        googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
+            @Override
+            public void onPoiClick(PointOfInterest poInterest) {
+                googleMap.addMarker(new MarkerOptions()
+                        .position(poInterest.latLng)
+                        .title(poInterest.name)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+            }
+        });
+
+        googleMap.setOnMarkerClickListener(this);
+
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -328,7 +352,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     if (task.isSuccessful() && task.getResult() != null) {
                         FindCurrentPlaceResponse likelyPlaces = task.getResult();
 
-                        // Set the count, handling cases where less than 5 entries are returned.
+                        // Set the count, handling cases where less than 30 entries are returned.
                         int count;
                         if (likelyPlaces.getPlaceLikelihoods().size() < M_MAX_ENTRIES) {
                             count = likelyPlaces.getPlaceLikelihoods().size();
@@ -400,11 +424,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 googleMap.addMarker(new MarkerOptions()
                         .title(mLikelyPlaceNames[which])
                         .position(markerLatLng)
-                        .snippet(markerSnippet));
+                        .snippet(markerSnippet)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
 
                 // Position the map's camera at the location of the marker.
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-                        DEFAULT_ZOOM));
+//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
+//                        DEFAULT_ZOOM));
             }
         };
 
@@ -436,5 +462,64 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
+    /** Called when the user clicks a marker. */
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+
+        //grab position of marker
+        LatLng pos = marker.getPosition();
+        Double latitude = pos.latitude;
+        Double longitude = pos.longitude;
+
+        //get location of marker
+        String loc = marker.getTitle();
+
+        //start form activity where user can start a request form - send marker location
+        Intent i = new Intent(getActivity(), FormActivity.class);
+        i.putExtra("loc", loc);
+        i.putExtra("lat", latitude);
+        i.putExtra("long", longitude);
+        startActivityForResult(i, 1);
+
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1){
+            if(resultCode == Activity.RESULT_OK){
+                String name=data.getStringExtra("name");
+                String title = data.getStringExtra("title");
+                String location = data.getStringExtra("location");
+                String description = data.getStringExtra("description");
+                Double payment = data.getDoubleExtra("payment", 0.00);
+                Double lat = data.getDoubleExtra("lat", 0.0);
+                Double longitude = data.getDoubleExtra("long", 0.0);
+                Boolean urgent = data.getBooleanExtra("urgent", false);
+
+                //name, phone, title, descrip, location, payment amt, lat, long
+                db = FirebaseDatabase.getInstance().getReference();
+                Listing listing = new Listing(MainActivity.uname,
+                        MainActivity.phone,
+                        title, description, location, payment.toString(), lat, longitude, urgent);
+
+                db.child("listings").child(MainActivity.uname).child(location.replaceAll("\\s", "")).setValue(listing);
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //No result - invalid selection
+
+            }
+
+        }
+    }
+
+//    private void writeNewListing(String userId, String name, String email) {
+//        User user = new User(name, email);
+//
+//        mDatabase.child("users").child(userId).setValue(user);
+//    }
 }
 
