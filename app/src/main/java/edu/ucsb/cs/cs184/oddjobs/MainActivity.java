@@ -21,11 +21,20 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static String uname;
+    public static String phone;
+    public static Boolean utype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent i = getIntent();
+        uname = i.getStringExtra("uname");
+        phone = i.getStringExtra("phone");
+        utype = i.getBooleanExtra("utype", false);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        FloatingActionButton fab = findViewById(R.id.fab);

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,18 +18,15 @@ import java.util.List;
 
 public class FormActivity extends AppCompatActivity {
 
-    private EditText nameField;
     private EditText titleField;
     private EditText description;
     private EditText payment;
+    private Switch urgent;
 
     @Override
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_form);
-
-        //name
-        nameField = findViewById(R.id.nameField);
 
         //title field (heading of post)
         titleField = findViewById(R.id.titleField);
@@ -39,30 +37,34 @@ public class FormActivity extends AppCompatActivity {
         //payment
         payment = findViewById(R.id.paymentField);
 
+        //urgent
+        urgent = findViewById(R.id.urgent);
+
         //money stuff
 
         FloatingActionButton fab = findViewById(R.id.sendForm);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick (View v){
                 Intent i = getIntent();
-                ArrayList<String> pos = i.getStringArrayListExtra("position");
+
+                Double lat = i.getDoubleExtra("lat", 0.0);
+                Double longitude = i.getDoubleExtra("long", 0.0);
                 String loc = i.getStringExtra("loc");
-                Log.d("position", pos.toString());
 
-
-                String nameText = nameField.getText().toString();
-                Log.d("nameText", nameText);
                 String titleText = titleField.getText().toString();
                 String descriptionText = description.getText().toString();
                 Double paymentNum = Double.parseDouble(payment.getText().toString());
+                Boolean urg = urgent.isChecked();
 
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("name", nameText);
                 resultIntent.putExtra("title", titleText);
                 resultIntent.putExtra("location", loc);
                 resultIntent.putExtra("description", descriptionText);
                 resultIntent.putExtra("payment", paymentNum);
-                resultIntent.putStringArrayListExtra("position", pos);
+                resultIntent.putExtra("lat", lat);
+                resultIntent.putExtra("long", longitude);
+                resultIntent.putExtra("urgent", urg);
+
 
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();

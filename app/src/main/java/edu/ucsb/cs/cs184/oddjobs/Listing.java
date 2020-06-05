@@ -14,13 +14,14 @@ public class Listing {
     public Double lat;
     public Double longitude;
     public Boolean hunter;
+    public Boolean urgent;
 
     public Listing() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public Listing(String name, String phone, String title, String descrip, String location, String payment,
-    Double lat, Double longitude) {
+    Double lat, Double longitude, Boolean urgent) {
         this.name = name;
         this.phone = phone;
         this.title = title;
@@ -29,6 +30,7 @@ public class Listing {
         this.payment = payment;
         this.lat = lat;
         this.longitude = longitude;
+        this.urgent = urgent;
 
     }
 }

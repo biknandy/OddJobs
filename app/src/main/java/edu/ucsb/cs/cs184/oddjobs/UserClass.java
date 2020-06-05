@@ -8,16 +8,18 @@ public class UserClass {
     public String uname;
     public String phone;
     public String pass;
+    public Integer age;
     public Boolean hunter;
 
     public UserClass() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public UserClass(String uname, String phone, String pass, Boolean hunter) {
+    public UserClass(String uname, String phone, String pass, Integer age, Boolean hunter) {
         this.uname = uname;
         this.phone = phone;
         this.pass = pass;
+        this.age = age;
         this.hunter = hunter;
 
     }

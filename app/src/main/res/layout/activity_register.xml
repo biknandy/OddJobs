@@ -15,6 +15,22 @@
         tools:context=".SignInActivity">
 
         <EditText
+            android:id="@+id/ageField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:hint="Age"
+            android:imeActionLabel="Age"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone" />
+
+        <EditText
             android:id="@+id/createName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -72,7 +88,7 @@
             android:text="@string/create_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hunterBox" />
+            app:layout_constraintTop_toBottomOf="@+id/hunter" />
 
         <Button
             android:id="@+id/login"
@@ -88,16 +104,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/createAccount" />
 
-        <CheckBox
-            android:id="@+id/hunterBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Switch
+            android:id="@+id/hunter"
+            android:layout_width="164dp"
+            android:layout_height="48dp"
             android:layout_marginTop="32dp"
             android:text="Bounty Hunter"
-            android:textSize="18sp"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone" />
+            app:layout_constraintTop_toBottomOf="@+id/ageField" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

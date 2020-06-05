@@ -57,6 +57,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.ucsb.cs.cs184.oddjobs.FormActivity;
+import edu.ucsb.cs.cs184.oddjobs.Listing;
+import edu.ucsb.cs.cs184.oddjobs.MainActivity;
 import edu.ucsb.cs.cs184.oddjobs.R;
 import edu.ucsb.cs.cs184.oddjobs.SignInActivity;
 
@@ -94,6 +96,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String[] mLikelyPlaceAddresses;
     private List[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
+
+    private DatabaseReference db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -463,13 +467,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        //grab position of marker and send to arraylist
+        //grab position of marker
         LatLng pos = marker.getPosition();
         Double latitude = pos.latitude;
         Double longitude = pos.longitude;
-        ArrayList<String> posArr =  new ArrayList<>();
-        posArr.add(latitude.toString());
-        posArr.add(longitude.toString());
 
         //get location of marker
         String loc = marker.getTitle();
@@ -477,7 +478,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         //start form activity where user can start a request form - send marker location
         Intent i = new Intent(getActivity(), FormActivity.class);
         i.putExtra("loc", loc);
-        i.putStringArrayListExtra("position",posArr);
+        i.putExtra("lat", latitude);
+        i.putExtra("long", longitude);
         startActivityForResult(i, 1);
 
         return true;
@@ -493,24 +495,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 String location = data.getStringExtra("location");
                 String description = data.getStringExtra("description");
                 Double payment = data.getDoubleExtra("payment", 0.00);
-                ArrayList<String> position = data.getStringArrayListExtra("position");
+                Double lat = data.getDoubleExtra("lat", 0.0);
+                Double longitude = data.getDoubleExtra("long", 0.0);
+                Boolean urgent = data.getBooleanExtra("urgent", false);
 
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Listing").child(SignInActivity.username).child(title);
-                ArrayList<String> lister = new ArrayList<>();
-                lister.add(location);
-                lister.add(description);
-                lister.add(payment.toString());
-                lister.add(position.get(0));
-                lister.add(position.get(1));
-                myRef.setValue(lister);
-                //TODO - send this info to firebase
-                Log.d("name", name);
-                Log.d("title", title);
-                Log.d("desc", description);
-                Log.d("pay", payment.toString());
-                Log.d("pos", position.toString());
-                Log.d("loc", location);
+                //name, phone, title, descrip, location, payment amt, lat, long
+                db = FirebaseDatabase.getInstance().getReference();
+                Listing listing = new Listing(MainActivity.uname,
+                        MainActivity.phone,
+                        title, description, location, payment.toString(), lat, longitude, urgent);
+
+                db.child("listings").child(MainActivity.uname).child(location.replaceAll("\\s", "")).setValue(listing);
+
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //No result - invalid selection

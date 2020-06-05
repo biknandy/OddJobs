@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +20,8 @@ public class CreateAccount extends AppCompatActivity {
     private EditText unameField;
     private EditText passField;
     private EditText phoneField;
-    private CheckBox hunterBox;
+    private EditText ageField;
+    private Switch hunterBox;
     private Button createButton;
     private Button signinButton;
 
@@ -33,7 +35,8 @@ public class CreateAccount extends AppCompatActivity {
         unameField = findViewById(R.id.createName);
         passField = findViewById(R.id.createPass);
         phoneField = findViewById(R.id.phone);
-        hunterBox = findViewById(R.id.hunterBox);
+        ageField = findViewById(R.id.ageField);
+        hunterBox = findViewById(R.id.hunter);
 
         createButton = findViewById(R.id.createAccount);
         signinButton = findViewById(R.id.login);
@@ -43,8 +46,10 @@ public class CreateAccount extends AppCompatActivity {
             public void onClick(View view) {
                 db = FirebaseDatabase.getInstance().getReference();
 
-                UserClass user = new UserClass(unameField.getText().toString(), phoneField.getText().toString(),
+                UserClass user = new UserClass(unameField.getText().toString(),
+                        phoneField.getText().toString(),
                         passField.getText().toString(),
+                        Integer.getInteger(ageField.getText().toString()),
                         hunterBox.isChecked());
 
                 db.child("users").child(unameField.getText().toString()).setValue(user);

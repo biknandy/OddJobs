@@ -17,7 +17,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SignInActivity extends AppCompatActivity {
     public static String username = "";
-    public static String userType = UserTypeActivity.getUserType();
+    public static Boolean userType;
+    public static String phone;
 
     private EditText user;
     private EditText pass;
@@ -42,13 +43,20 @@ public class SignInActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot snapshot) {
                         user = findViewById(R.id.textView4);
                         pass = findViewById(R.id.editTextTextPassword);
-                        if (snapshot.hasChild(user.getText().toString()) ) {
-                            Log.d("SUCESS",snapshot.child(user.getText().toString()).getValue(String.class));
-                            Log.d("SUCESS",pass.getText().toString());
-                            if(pass.getText().toString().equals(snapshot.child(user.getText().toString()).getValue(String.class))){
-                                Log.d("SUCESS",snapshot.child(user.getText().toString()).getValue(String.class));
+                        if (snapshot.hasChild(user.getText().toString())) {
+
+                            if(pass.getText().toString().equals(snapshot.child(
+                                    user.getText().toString()).child("pass").getValue(String.class))
+                            ){
+
                                 username = user.getText().toString();
+                                userType = snapshot.child(username).child("hunter").getValue(Boolean.class);
+                                phone = snapshot.child(username).child("phone").getValue(String.class);
+
                                 Intent intent =  new Intent(SignInActivity.this,MainActivity.class);
+                                intent.putExtra("uname", username);
+                                intent.putExtra("phone", phone);
+                                intent.putExtra("utype", userType);
                                 startActivity(intent);
                             }
                         }
@@ -76,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public static String getUserType(){
+    public static Boolean getUserType(){
         return userType;
     }
 
