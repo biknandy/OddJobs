@@ -506,15 +506,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             //start form activity where user can start a request form - send marker location
             Intent i = new Intent(getActivity(), FormActivity.class);
+            Log.d("w0t",getActivity().toString());
             i.putExtra("loc", loc);
             i.putExtra("lat", latitude);
             i.putExtra("long", longitude);
-            startActivityForResult(i, 1);
-            Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_home);
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.detach(currentFragment);
-            fragmentTransaction.attach(currentFragment);
-            fragmentTransaction.commit();
+            startActivityForResult(i, Activity.RESULT_OK);
+
 
             return true;
         } else {
@@ -526,7 +523,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_home);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.detach(currentFragment);
+        fragmentTransaction.attach(currentFragment);
+        fragmentTransaction.commit();
     }
 
 //    private void writeNewListing(String userId, String name, String email) {
