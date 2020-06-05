@@ -41,14 +41,18 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -97,7 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private List[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
 
-    private DatabaseReference db;
+    private FirebaseDatabase db;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -113,6 +117,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 //        mMapView.onResume();
 
         super.onCreate(savedInstanceState);
+
+        db = FirebaseDatabase.getInstance();
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -196,6 +202,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap map) {
         googleMap = map;
 
+        googleMap.clear();
+
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -228,10 +236,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 googleMap.addMarker(new MarkerOptions()
                         .position(poInterest.latLng)
                         .title(poInterest.name)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).setTag("blue");
 
             }
         });
+
+        //load all markers onto map from database
+        DatabaseReference ref = db.getReference("listings").child(MainActivity.uname);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot snapshot) {
+                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                     Listing l = postSnapshot.getValue(Listing.class);
+                     LatLng pos = new LatLng(l.lat, l.longitude);
+                     googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
+                 }
+
+             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+         });
 
         googleMap.setOnMarkerClickListener(this);
 
@@ -425,7 +452,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         .title(mLikelyPlaceNames[which])
                         .position(markerLatLng)
                         .snippet(markerSnippet)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).setTag("blue");
 
 
                 // Position the map's camera at the location of the marker.
@@ -467,53 +494,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        //grab position of marker
-        LatLng pos = marker.getPosition();
-        Double latitude = pos.latitude;
-        Double longitude = pos.longitude;
+        if (marker.getTag() == "blue"){
+            //grab position of marker
+            LatLng pos = marker.getPosition();
+            Double latitude = pos.latitude;
+            Double longitude = pos.longitude;
 
-        //get location of marker
-        String loc = marker.getTitle();
+            //get location of marker
+            String loc = marker.getTitle();
 
-        //start form activity where user can start a request form - send marker location
-        Intent i = new Intent(getActivity(), FormActivity.class);
-        i.putExtra("loc", loc);
-        i.putExtra("lat", latitude);
-        i.putExtra("long", longitude);
-        startActivityForResult(i, 1);
 
-        return true;
+            //start form activity where user can start a request form - send marker location
+            Intent i = new Intent(getActivity(), FormActivity.class);
+            i.putExtra("loc", loc);
+            i.putExtra("lat", latitude);
+            i.putExtra("long", longitude);
+            startActivityForResult(i, 1);
+            Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_home);
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.detach(currentFragment);
+            fragmentTransaction.attach(currentFragment);
+            fragmentTransaction.commit();
+
+            return true;
+        } else {
+            return false;
+        }
+
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1){
-            if(resultCode == Activity.RESULT_OK){
-                String name=data.getStringExtra("name");
-                String title = data.getStringExtra("title");
-                String location = data.getStringExtra("location");
-                String description = data.getStringExtra("description");
-                Double payment = data.getDoubleExtra("payment", 0.00);
-                Double lat = data.getDoubleExtra("lat", 0.0);
-                Double longitude = data.getDoubleExtra("long", 0.0);
-                Boolean urgent = data.getBooleanExtra("urgent", false);
-
-                //name, phone, title, descrip, location, payment amt, lat, long
-                db = FirebaseDatabase.getInstance().getReference();
-                Listing listing = new Listing(MainActivity.uname,
-                        MainActivity.phone,
-                        title, description, location, payment.toString(), lat, longitude, urgent);
-
-                db.child("listings").child(MainActivity.uname).child(location.replaceAll("\\s", "")).setValue(listing);
-
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //No result - invalid selection
-
-            }
-
-        }
+        //super.onActivityResult(requestCode, resultCode, data);
     }
 
 //    private void writeNewListing(String userId, String name, String email) {

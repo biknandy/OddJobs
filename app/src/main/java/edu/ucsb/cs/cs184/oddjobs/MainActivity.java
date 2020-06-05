@@ -1,5 +1,6 @@
 package edu.ucsb.cs.cs184.oddjobs;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,8 +9,11 @@ import android.view.Menu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +21,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import edu.ucsb.cs.cs184.oddjobs.ui.map.MapFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,5 +81,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1){
+            if(resultCode == Activity.RESULT_OK){
+                String name=data.getStringExtra("name");
+                String title = data.getStringExtra("title");
+                String location = data.getStringExtra("location");
+                String description = data.getStringExtra("description");
+                Double payment = data.getDoubleExtra("payment", 0.00);
+                Double lat = data.getDoubleExtra("lat", 0.0);
+                Double longitude = data.getDoubleExtra("long", 0.0);
+                Boolean urgent = data.getBooleanExtra("urgent", false);
+
+                //name, phone, title, descrip, location, payment amt, lat, long
+
+                Listing listing = new Listing(MainActivity.uname,
+                        MainActivity.phone,
+                        title, description, location, payment.toString(), lat, longitude, urgent);
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                ref.child("listings").child(MainActivity.uname).child(location.replaceAll("\\s", "")).setValue(listing);
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //No result - invalid selection
+
+            }
+
+        }
     }
 }
