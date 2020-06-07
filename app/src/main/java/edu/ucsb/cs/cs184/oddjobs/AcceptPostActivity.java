@@ -61,9 +61,8 @@ public class AcceptPostActivity extends AppCompatActivity {
 
 
 
-                //sendSMS();
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(phone, null, textMessage, null, null);
+                sendSMS();
+
                 ref.child("listings").child(name).child(loc).child("acceptedby").setValue(MainActivity.uname);
 
                 finish();
@@ -78,6 +77,24 @@ public class AcceptPostActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    protected void sendSMS() {
+        Log.i("Send SMS", "");
+        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+        //phone = "";
+        smsIntent.setData(Uri.parse("smsto:"));
+        smsIntent.setType("vnd.android-dir/mms-sms");
+        smsIntent.putExtra("address"  , phone);
+        smsIntent.putExtra("sms_body"  , textMessage);
+
+        try {
+            startActivity(smsIntent);
+            finish();
+            Log.i("Finished sending SMS...", "");
+        } catch (android.content.ActivityNotFoundException ex) {
+
+        }
     }
 
 
