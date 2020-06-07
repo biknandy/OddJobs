@@ -524,44 +524,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1){
-            if(resultCode == Activity.RESULT_OK){
-                String name=data.getStringExtra("name");
-                String title = data.getStringExtra("title");
-                String location = data.getStringExtra("location");
-                String description = data.getStringExtra("description");
-                Double payment = data.getDoubleExtra("payment", 0.00);
-                Double lat = data.getDoubleExtra("lat", 0.0);
-                Double longitude = data.getDoubleExtra("long", 0.0);
-                Boolean urgent = data.getBooleanExtra("urgent", false);
-
-                //name, phone, title, descrip, location, payment amt, lat, long
-
-                Listing listing = new Listing(MainActivity.uname,
-                        MainActivity.phone,
-                        title, description, location, payment.toString(), lat, longitude, urgent);
-
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-
-                ref.child("listings").child(MainActivity.uname).child(location.replaceAll("\\s", "")).setValue(listing);
-
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //No result - invalid selection
-
-            }
-
-        }
-//        Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_home);
-//        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//        fragmentTransaction.detach(currentFragment);
-//        fragmentTransaction.attach(currentFragment);
-//        fragmentTransaction.commit();
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        //super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == 1){
+//            if(resultCode == Activity.RESULT_OK){
+//                String name=data.getStringExtra("name");
+//                String title = data.getStringExtra("title");
+//                String location = data.getStringExtra("location");
+//                String description = data.getStringExtra("description");
+//                Double payment = data.getDoubleExtra("payment", 0.00);
+//                Double lat = data.getDoubleExtra("lat", 0.0);
+//                Double longitude = data.getDoubleExtra("long", 0.0);
+//                Boolean urgent = data.getBooleanExtra("urgent", false);
+//
+//                //name, phone, title, descrip, location, payment amt, lat, long
+//
+//                Listing listing = new Listing(MainActivity.uname,
+//                        MainActivity.phone,
+//                        title, description, location, payment.toString(), lat, longitude, urgent);
+//
+//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+//
+//                ref.child("listings").child(MainActivity.uname).child(location.replaceAll("\\s", "")).setValue(listing);
+//
+//            }
+//            if (resultCode == Activity.RESULT_CANCELED) {
+//                //No result - invalid selection
+//
+//            }
+//
+//        }
+////        Fragment currentFragment = getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_home);
+////        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+////        fragmentTransaction.detach(currentFragment);
+////        fragmentTransaction.attach(currentFragment);
+////        fragmentTransaction.commit();
+//    }
 
 }
 
