@@ -180,8 +180,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.current_place_menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        if (!MainActivity.utype) {
+            inflater.inflate(R.menu.current_place_menu, menu);
+            super.onCreateOptionsMenu(menu, inflater);
+        } else {
+            super.onCreateOptionsMenu(menu, inflater);
+        }
     }
 
     /**
