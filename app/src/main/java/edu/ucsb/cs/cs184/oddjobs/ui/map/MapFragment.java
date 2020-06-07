@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.ucsb.cs.cs184.oddjobs.AcceptPostActivity;
 import edu.ucsb.cs.cs184.oddjobs.FormActivity;
 import edu.ucsb.cs.cs184.oddjobs.Listing;
 import edu.ucsb.cs.cs184.oddjobs.MainActivity;
@@ -281,9 +282,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         for (DataSnapshot listing : postChildren) {
                             Listing l = listing.getValue(Listing.class);
                             LatLng pos = new LatLng(l.lat, l.longitude);
+                            String postingDescriptor = "location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact num: " + l.phone;
+
                             googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
-                                    .snippet(l.descrip)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                                    .snippet(postingDescriptor)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))).setTag("purple");
                         }
 
                     }
@@ -293,6 +296,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
+                }
+            });
+            googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Log.d("WIFOI","WINFO");
+                    LatLng pos = marker.getPosition();
+                    Double latitude = pos.latitude;
+                    Double longitude = pos.longitude;
+
+                    //get location of marker
+                    String loc = marker.getTitle();
+
+
+                    //start form activity where user can start a request form - send marker location
+                    Intent i = new Intent(getActivity(), AcceptPostActivity.class);
+
+                    Log.d("w0t",getActivity().toString());
+                    i.putExtra("loc", loc);
+                    i.putExtra("lat", latitude);
+                    i.putExtra("long", longitude);
+                    i.putExtra("posting", marker.getSnippet());
+                    startActivity(i);
                 }
             });
         }
@@ -528,6 +554,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+
     /** Called when the user clicks a marker. */
     @Override
     public boolean onMarkerClick(final Marker marker) {
@@ -555,9 +582,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
             return true;
-        } else {
+        } else if(marker.getTag() == "purple") {
+            Log.d("PURPLE PRESSED","PURPLES");
             return false;
         }
+
+        else {
+            Log.d("RED PRESSED","RED");
+                return false;
+            }
+
 
 
     }
