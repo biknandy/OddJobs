@@ -11,6 +11,7 @@ public class Listing {
     public String descrip;
     public String location;
     public String payment;
+    public String acceptedby;
     public Double lat;
     public Double longitude;
     public Boolean hunter;
@@ -31,6 +32,6 @@ public class Listing {
         this.lat = lat;
         this.longitude = longitude;
         this.urgent = urgent;
-
+        this.acceptedby = "none";
     }
 }
