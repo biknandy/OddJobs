@@ -58,7 +58,10 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EventListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.ucsb.cs.cs184.oddjobs.FormActivity;
 import edu.ucsb.cs.cs184.oddjobs.Listing;
@@ -230,35 +233,66 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
-        googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
-            @Override
-            public void onPoiClick(PointOfInterest poInterest) {
-                googleMap.addMarker(new MarkerOptions()
-                        .position(poInterest.latLng)
-                        .title(poInterest.name)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).setTag("blue");
+        if (!MainActivity.utype){
+            googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
+                @Override
+                public void onPoiClick(PointOfInterest poInterest) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(poInterest.latLng)
+                            .title(poInterest.name)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))).setTag("blue");
 
-            }
-        });
+                }
+            });
+        }
 
-        //load all markers onto map from database
-        DatabaseReference ref = db.getReference("listings").child(MainActivity.uname);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-             @Override
-             public void onDataChange(DataSnapshot snapshot) {
-                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                     Listing l = postSnapshot.getValue(Listing.class);
-                     LatLng pos = new LatLng(l.lat, l.longitude);
-                     googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
-                 }
+        if (!MainActivity.utype){
+            //load all markers onto map from database CONTRACTOR
+            DatabaseReference ref = db.getReference("listings").child(MainActivity.uname);
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                        Listing l = postSnapshot.getValue(Listing.class);
+                        LatLng pos = new LatLng(l.lat, l.longitude);
+                        googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
+                    }
 
-             }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-         });
+                }
+            });
+        } else {
+            //load all markers onto map from database BOUNTY HUNTER
+            DatabaseReference ref = db.getReference("listings");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                        Iterable<DataSnapshot> postChildren = postSnapshot.getChildren();
+
+                        for (DataSnapshot listing : postChildren) {
+                            Listing l = listing.getValue(Listing.class);
+                            LatLng pos = new LatLng(l.lat, l.longitude);
+                            googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
+                                    .snippet(l.descrip)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
         googleMap.setOnMarkerClickListener(this);
 
