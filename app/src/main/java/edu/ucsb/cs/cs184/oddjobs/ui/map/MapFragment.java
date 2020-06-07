@@ -312,7 +312,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
                     //start form activity where user can start a request form - send marker location
                     Intent i = new Intent(getActivity(), AcceptPostActivity.class);
-                    
                     Log.d("w0t",getActivity().toString());
                     i.putExtra("loc", loc);
                     i.putExtra("lat", latitude);

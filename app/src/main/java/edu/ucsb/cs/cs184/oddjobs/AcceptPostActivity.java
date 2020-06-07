@@ -52,7 +52,7 @@ public class AcceptPostActivity extends AppCompatActivity {
                 reward = splitar[2].split(": ")[1];
                 textMessage = "Hi, my name is " + MainActivity.uname +", a bounty hunter, I have accepted your posting at: " + loc + " for the reward amount: " + reward;
 
-                phone = "+17145124682";
+
                 Log.d("SPLITAR",name);
                 Log.d("SPLITAR",loc);
                 Log.d("SPLITAR",phone);
