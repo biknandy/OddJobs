@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,24 +52,43 @@ public class FormActivity extends AppCompatActivity {
                 Double lat = i.getDoubleExtra("lat", 0.0);
                 Double longitude = i.getDoubleExtra("long", 0.0);
                 String loc = i.getStringExtra("loc");
+                String name = i.getStringExtra("name");
+                String phone = i.getStringExtra("phone");
+                Boolean utype = i.getBooleanExtra("utype", false);
 
                 String titleText = titleField.getText().toString();
                 String descriptionText = description.getText().toString();
                 Double paymentNum = Double.parseDouble(payment.getText().toString());
                 Boolean urg = urgent.isChecked();
 
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("title", titleText);
-                resultIntent.putExtra("location", loc);
-                resultIntent.putExtra("description", descriptionText);
-                resultIntent.putExtra("payment", paymentNum);
-                resultIntent.putExtra("lat", lat);
-                resultIntent.putExtra("long", longitude);
-                resultIntent.putExtra("urgent", urg);
 
 
-                setResult(Activity.RESULT_OK, resultIntent);
-                finish();
+                Listing listing = new Listing(name,
+                        phone,
+                        titleText, descriptionText, loc, paymentNum.toString(), lat, longitude, urg);
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                ref.child("listings").child(name).child(loc.replaceAll("\\s", "")).setValue(listing);
+
+                Intent intent = new Intent(FormActivity.this, MainActivity.class);
+                intent.putExtra("uname", name);
+                intent.putExtra("phone", phone);
+                intent.putExtra("utype", utype);
+                startActivity(intent);
+
+//                Intent resultIntent = new Intent();
+//                resultIntent.putExtra("title", titleText);
+//                resultIntent.putExtra("location", loc);
+//                resultIntent.putExtra("description", descriptionText);
+//                resultIntent.putExtra("payment", paymentNum);
+//                resultIntent.putExtra("lat", lat);
+//                resultIntent.putExtra("long", longitude);
+//                resultIntent.putExtra("urgent", urg);
+
+
+                //setResult(Activity.RESULT_OK, resultIntent);
+                //finish();
             }
         });
     }
