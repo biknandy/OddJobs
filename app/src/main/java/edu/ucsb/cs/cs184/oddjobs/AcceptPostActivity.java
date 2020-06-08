@@ -56,7 +56,6 @@ public class AcceptPostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 l = snapshot.getValue(Listing.class);
-                Log.d("IT WORKS", l.title);
             }
 
             @Override
@@ -70,27 +69,7 @@ public class AcceptPostActivity extends AppCompatActivity {
 
         accept.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 
-                
-                //String[] splitar = postDetails.split("\n");
-                //loc = splitar[0].split(": ")[1];
-                //name = splitar[2].split(": ")[1];
-                //phone = splitar[4].split(": ")[1];
-                //reward = splitar[2].split(": ")[1];
-                textMessage = "Hi, my name is " + MainActivity.uname +", a bounty hunter, I have accepted your posting at: " + l.location + " for the reward amount: " + l.payment;
-
-
-                //Log.d("SPLITAR",name);
-//                Log.d("SPLITAR",loc);
-//                Log.d("SPLITAR",phone);
-//                Log.d("SPLITAR",reward);
-//                Log.d("SPLITAR",textMessage);
-
-
-
-                sendSMS();
-
                 ref.child("acceptedby").setValue(MainActivity.uname);
                 ref.child("status").setValue("inprogress");
 
@@ -105,21 +84,30 @@ public class AcceptPostActivity extends AppCompatActivity {
                 finish();
             }
         });
+        
+        Button contact = (Button)findViewById(R.id.contactButton);
+        contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textMessage = "Hi, my name is " + MainActivity.uname +", a bounty hunter, I have accepted your posting at: " + l.location + " for the reward amount: " + l.payment;
+                sendSMS(l, textMessage);
+            }
+        });
 
     }
 
-    protected void sendSMS() {
+    protected void sendSMS(Listing l, String message) {
         Log.i("Send SMS", "");
         Intent smsIntent = new Intent(Intent.ACTION_VIEW);
         //phone = "";
-        smsIntent.setData(Uri.parse("smsto:"));
-        smsIntent.setType("vnd.android-dir/mms-sms");
+        smsIntent.setDataAndType(Uri.parse("smsto:"), "vnd.android-dir/mms-sms");
+        //smsIntent.setType("vnd.android-dir/mms-sms");
         smsIntent.putExtra("address"  , l.phone);
-        smsIntent.putExtra("sms_body"  , textMessage);
+        smsIntent.putExtra("sms_body"  , message);
 
-        try {
+        try{
             startActivity(smsIntent);
-            //finish();
+            finish();
             Log.i("Finished sending SMS...", "");
         } catch (android.content.ActivityNotFoundException ex) {
 
