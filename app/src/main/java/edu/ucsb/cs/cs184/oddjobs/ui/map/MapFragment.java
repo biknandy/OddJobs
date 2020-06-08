@@ -122,6 +122,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         super.onCreate(savedInstanceState);
 
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Map");
+
         db = FirebaseDatabase.getInstance();
 
         // Retrieve location and camera position from saved instance state.
