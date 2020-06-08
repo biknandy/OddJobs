@@ -16,6 +16,7 @@ public class Listing {
     public Double longitude;
     public Boolean hunter;
     public Boolean urgent;
+    public String status;
 
     public Listing() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -33,5 +34,6 @@ public class Listing {
         this.longitude = longitude;
         this.urgent = urgent;
         this.acceptedby = "none";
+        this.status = "incomplete";
     }
 }
