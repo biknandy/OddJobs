@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsb.cs.cs184.oddjobs.BountyListingAdapter;
+import edu.ucsb.cs.cs184.oddjobs.ContractListingAdapter;
 import edu.ucsb.cs.cs184.oddjobs.Listing;
 import edu.ucsb.cs.cs184.oddjobs.MainActivity;
 import edu.ucsb.cs.cs184.oddjobs.R;
@@ -54,6 +55,30 @@ public class ListingFragment extends Fragment {
 
         if (!MainActivity.utype){
             //CONTRACTOR
+
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("listings").child(MainActivity.uname);
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                        Listing l = postSnapshot.getValue(Listing.class);
+                        listings.add(l);
+                    }
+
+                    // Create the adapter to convert the array to views
+                    ContractListingAdapter adapter = new ContractListingAdapter(getActivity(), listings);
+                    //adapter.addAll(listings);
+                    // Attach the adapter to a ListView
+                    ListView lView = (ListView) getActivity().findViewById(R.id.listingList);
+                    lView.setAdapter(adapter);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         } else {
             //BOUNTY HUNTER
             //load all markers onto map from database BOUNTY HUNTER
