@@ -60,6 +60,7 @@ public class ListingFragment extends Fragment {
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
+                    listings.clear();
                     for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                         Listing l = postSnapshot.getValue(Listing.class);
                         listings.add(l);
@@ -67,6 +68,7 @@ public class ListingFragment extends Fragment {
 
                     // Create the adapter to convert the array to views
                     ContractListingAdapter adapter = new ContractListingAdapter(getActivity(), listings);
+
                     //adapter.addAll(listings);
                     // Attach the adapter to a ListView
                     ListView lView = (ListView) getActivity().findViewById(R.id.listingList);
@@ -86,6 +88,7 @@ public class ListingFragment extends Fragment {
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
+                    listings.clear();
                     for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                         Iterable<DataSnapshot> postChildren = postSnapshot.getChildren();
 

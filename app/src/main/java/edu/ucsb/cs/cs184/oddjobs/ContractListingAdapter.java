@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,12 +31,20 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
         // Lookup view for data population
         TextView listingTitle = (TextView) convertView.findViewById(R.id.listingTitleCont);
         TextView status = (TextView) convertView.findViewById(R.id.listingStatus);
+        TextView payment = (TextView) convertView.findViewById(R.id.listingPayCon);
+        TextView descrip = (TextView) convertView.findViewById(R.id.listingDes);
+        Button paymentButton = (Button) convertView.findViewById(R.id.paymentButton);
         // Populate the data into the template view using the data object
         listingTitle.setText(l.title);
+        descrip.setText(l.descrip);
+        payment.setText("$" + l.payment + "0");
+
         if (l.status.equals("inprogress")){
             status.setText("In Progress");
+            paymentButton.setVisibility(View.VISIBLE);
         } else if (l.status.equals("incomplete")) {
-            status.setText("Incomplete");
+            status.setText("Looking for Hunter");
+            paymentButton.setVisibility(View.GONE);
         } else {
             status.setText("Completed");
         }
