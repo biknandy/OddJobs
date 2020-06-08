@@ -1,6 +1,7 @@
 package edu.ucsb.cs.cs184.oddjobs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +42,11 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
 
         if (l.status.equals("inprogress")){
             status.setText("In Progress");
+            status.setTextColor(Color.parseColor("#28a745"));
             paymentButton.setVisibility(View.VISIBLE);
         } else if (l.status.equals("incomplete")) {
             status.setText("Looking for Hunter");
+            status.setTextColor(Color.parseColor("#dc3545"));
             paymentButton.setVisibility(View.GONE);
         } else {
             status.setText("Completed");

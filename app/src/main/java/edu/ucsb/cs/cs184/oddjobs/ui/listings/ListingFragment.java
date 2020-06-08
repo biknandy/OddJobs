@@ -1,10 +1,12 @@
 package edu.ucsb.cs.cs184.oddjobs.ui.listings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ucsb.cs.cs184.oddjobs.AcceptPostActivity;
 import edu.ucsb.cs.cs184.oddjobs.BountyListingAdapter;
 import edu.ucsb.cs.cs184.oddjobs.ContractListingAdapter;
 import edu.ucsb.cs.cs184.oddjobs.Listing;
@@ -94,8 +97,9 @@ public class ListingFragment extends Fragment {
 
                         for (DataSnapshot listing : postChildren) {
                             Listing l = listing.getValue(Listing.class);
-                            //Log.d("hello", l.toString());
-                            listings.add(l);
+                            if (!l.status.equals("inprogress")){
+                                listings.add(l);
+                            }
                         }
 
                     }
@@ -108,6 +112,23 @@ public class ListingFragment extends Fragment {
                     // Attach the adapter to a ListView
                     ListView lView = (ListView) getActivity().findViewById(R.id.listingList);
                     lView.setAdapter(adapter);
+
+                    lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                            Listing l = (Listing) adapter.getItemAtPosition(position);
+                            //start ACCEPTPOST activity here
+
+                            String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
+                            Intent i = new Intent(getActivity(), AcceptPostActivity.class);
+                            i.putExtra("loc", l.location);
+                            i.putExtra("lat", l.lat);
+                            i.putExtra("long", l.longitude);
+                            i.putExtra("posting", postingDescriptor);
+                            startActivity(i);
+
+                        }
+                    });
 
                 }
 

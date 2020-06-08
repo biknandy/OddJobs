@@ -285,10 +285,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             Listing l = listing.getValue(Listing.class);
                             LatLng pos = new LatLng(l.lat, l.longitude);
                             String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
+                            if (!(l.status.equals("inprogress"))){
+                                googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
+                                        .snippet(postingDescriptor)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))).setTag("purple");
+                            }
 
-                            googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
-                                    .snippet(postingDescriptor)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))).setTag("purple");
                         }
 
                     }
@@ -316,8 +318,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     Intent i = new Intent(getActivity(), AcceptPostActivity.class);
                     Log.d("w0t",getActivity().toString());
                     i.putExtra("loc", loc);
-                    //i.putExtra("lat", latitude);
-                    //i.putExtra("long", longitude);
+                    i.putExtra("lat", latitude);
+                    i.putExtra("long", longitude);
                     i.putExtra("posting", marker.getSnippet());
                     startActivity(i);
 

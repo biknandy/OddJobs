@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -31,9 +32,17 @@ public class AcceptPostActivity extends AppCompatActivity {
     public String phone;
     public String reward;
     public String textMessage;
+    private Double lat;
+    private Double longitude;
     private Listing l;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
     private DatabaseReference ref;
+    
+    private TextView titleView;
+    private TextView desView;
+    private TextView locView;
+    private TextView payView;
+    private TextView nameView;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -41,10 +50,17 @@ public class AcceptPostActivity extends AppCompatActivity {
         setContentView(R.layout.form_acceptance);
         currentIntent = getIntent();
         postDetails =  currentIntent.getStringExtra("posting");
-        TextView tv = (TextView) findViewById(R.id.PostView);
-        tv.setText(postDetails);
+        lat = currentIntent.getDoubleExtra("lat", 0.0);
+        longitude = currentIntent.getDoubleExtra("long", 0.0);
         
-        //loc = currentIntent.getStringExtra("loc");
+        titleView = (TextView) findViewById(R.id.titleAccept);
+        desView = (TextView) findViewById(R.id.descripAccept);
+        locView = (TextView) findViewById(R.id.locAccept);
+        payView = (TextView) findViewById(R.id.payAccept);
+        nameView = (TextView) findViewById(R.id.nameAccept);
+        //tv.setText(postDetails);
+        
+        
         String[] splitar = postDetails.split(",");
         loc = (splitar[0].split(": ")[1]).replaceAll("\\s", "");
         name = splitar[3].split(": ")[1];
@@ -56,6 +72,12 @@ public class AcceptPostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 l = snapshot.getValue(Listing.class);
+                titleView.setText(l.title);
+                desView.setText(l.descrip);
+                locView.setText(l.location);
+                payView.setText("$" + l.payment + "0");
+                payView.setTextColor(Color.parseColor("#28a745"));
+                nameView.setText(l.name);
             }
 
             @Override
