@@ -49,7 +49,7 @@ public class CreateAccount extends AppCompatActivity {
                 UserClass user = new UserClass(unameField.getText().toString(),
                         phoneField.getText().toString(),
                         passField.getText().toString(),
-                        Integer.getInteger(ageField.getText().toString()),
+                        ageField.getText().toString(),
                         hunterBox.isChecked());
 
                 db.child("users").child(unameField.getText().toString()).setValue(user);

@@ -37,12 +37,15 @@ public class AcceptPostActivity extends AppCompatActivity {
     private Listing l;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
     private DatabaseReference ref;
+    private DatabaseReference ref2;
+    private String age;
     
     private TextView titleView;
     private TextView desView;
     private TextView locView;
     private TextView payView;
     private TextView nameView;
+    private TextView ageView;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class AcceptPostActivity extends AppCompatActivity {
         locView = (TextView) findViewById(R.id.locAccept);
         payView = (TextView) findViewById(R.id.payAccept);
         nameView = (TextView) findViewById(R.id.nameAccept);
+        ageView = (TextView) findViewById(R.id.ageAccept);
         //tv.setText(postDetails);
         
         
@@ -86,6 +90,23 @@ public class AcceptPostActivity extends AppCompatActivity {
             }
 
         });
+        
+        
+        ref2 = FirebaseDatabase.getInstance()
+                .getReference("users").child(name).child("age");
+        
+        ref2.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot ageShot) {
+                age = ageShot.getValue().toString();
+                ageView.setText(age);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }); 
 
         Button accept= (Button)findViewById(R.id.AcceptButton);
 
