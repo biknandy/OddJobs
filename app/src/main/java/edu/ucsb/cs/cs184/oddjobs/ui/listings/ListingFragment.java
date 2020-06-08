@@ -77,6 +77,23 @@ public class ListingFragment extends Fragment {
                     ListView lView = (ListView) getActivity().findViewById(R.id.listingList);
                     lView.setAdapter(adapter);
 
+                    lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+                            Listing l = (Listing) adapter.getItemAtPosition(position);
+                            //start ACCEPTPOST activity here
+
+                            String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
+                            Intent i = new Intent(getActivity(), AcceptPostActivity.class);
+                            i.putExtra("loc", l.location);
+                            i.putExtra("lat", l.lat);
+                            i.putExtra("long", l.longitude);
+                            i.putExtra("posting", postingDescriptor);
+                            startActivity(i);
+
+                        }
+                    });
+
                 }
 
                 @Override

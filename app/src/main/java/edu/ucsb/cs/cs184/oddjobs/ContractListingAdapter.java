@@ -2,6 +2,7 @@ package edu.ucsb.cs.cs184.oddjobs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Listing l = getItem(position);
+         Listing l = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -34,20 +35,18 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
         TextView status = (TextView) convertView.findViewById(R.id.listingStatus);
         TextView payment = (TextView) convertView.findViewById(R.id.listingPayCon);
         TextView descrip = (TextView) convertView.findViewById(R.id.listingDes);
-        Button paymentButton = (Button) convertView.findViewById(R.id.paymentButton);
         // Populate the data into the template view using the data object
         listingTitle.setText(l.title);
         descrip.setText(l.descrip);
         payment.setText("$" + l.payment + "0");
 
+
         if (l.status.equals("inprogress")){
             status.setText("In Progress");
             status.setTextColor(Color.parseColor("#28a745"));
-            paymentButton.setVisibility(View.VISIBLE);
         } else if (l.status.equals("incomplete")) {
             status.setText("Looking for Hunter");
             status.setTextColor(Color.parseColor("#dc3545"));
-            paymentButton.setVisibility(View.GONE);
         } else {
             status.setText("Completed");
         }
@@ -55,4 +54,7 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
         // Return the completed view to render on screen
         return convertView;
     }
+
+
+
 }
