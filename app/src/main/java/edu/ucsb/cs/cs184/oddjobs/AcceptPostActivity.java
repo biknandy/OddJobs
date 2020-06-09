@@ -116,6 +116,13 @@ public class AcceptPostActivity extends AppCompatActivity {
                 ref.child("acceptedby").setValue(MainActivity.uname);
                 ref.child("status").setValue("inprogress");
 
+                //OPEN GOOGLE MAPS
+                // Creates an Intent that will load a map of San Francisco
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+
                 finish();
             }
         });

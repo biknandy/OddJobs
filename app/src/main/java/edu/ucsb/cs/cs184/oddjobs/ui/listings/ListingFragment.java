@@ -38,12 +38,16 @@ public class ListingFragment extends Fragment {
 
     private ListingViewModel listingViewModel;
     private List<Listing> listings;
+    private ListView lView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         listingViewModel =
                 ViewModelProviders.of(this).get(ListingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_listings, container, false);
+
+
+
 
         listings = new ArrayList<>();
 
@@ -64,11 +68,12 @@ public class ListingFragment extends Fragment {
                     }
 
                     // Create the adapter to convert the array to views
-                    ContractListingAdapter adapter = new ContractListingAdapter(getActivity(), listings);
+                    ContractListingAdapter adapter = new ContractListingAdapter(root.getContext(), listings);
+                    lView = (ListView) root.findViewById(R.id.listingList);
 
                     //adapter.addAll(listings);
                     // Attach the adapter to a ListView
-                    ListView lView = (ListView) getActivity().findViewById(R.id.listingList);
+
                     lView.setAdapter(adapter);
 
                     lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,7 +83,7 @@ public class ListingFragment extends Fragment {
 
                             if (l.status.equals("inprogress")) {
                                 String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
-                                Intent i = new Intent(getActivity(), CheckoutActivity.class);
+                                Intent i = new Intent(root.getContext(), CheckoutActivity.class);
                                 i.putExtra("price", l.payment);
                                 i.putExtra("name", l.name);
                                 i.putExtra("loc", l.location);
@@ -125,7 +130,7 @@ public class ListingFragment extends Fragment {
                     BountyListingAdapter adapter = new BountyListingAdapter(getActivity(), listings);
                     //adapter.addAll(listings);
                     // Attach the adapter to a ListView
-                    ListView lView = (ListView) getActivity().findViewById(R.id.listingList);
+                    lView = (ListView) root.findViewById(R.id.listingList);
                     lView.setAdapter(adapter);
 
                     lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
