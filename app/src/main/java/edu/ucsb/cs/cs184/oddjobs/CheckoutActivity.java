@@ -2,6 +2,7 @@ package edu.ucsb.cs.cs184.oddjobs;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,8 +21,11 @@ import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.TransactionInfo;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import sqip.CardEntry;
 import sqip.GooglePay;
@@ -39,10 +43,14 @@ public class CheckoutActivity extends AppCompatActivity {
     private OrderSheet orderSheet;
 
     private DatabaseReference ref;
+    private DatabaseReference ref2;
 
     private String totalReward;
     public String userName;
     public String location;
+    public String hunter;
+    public UserClass userclass;
+    public double currentWalletVal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -55,7 +63,7 @@ public class CheckoutActivity extends AppCompatActivity {
         totalReward = paymentIntent.getStringExtra("price");
         userName = paymentIntent.getStringExtra("name");
         location = paymentIntent.getStringExtra("loc");
-
+        hunter = paymentIntent.getStringExtra("hunter");
         TextView paymentView = (TextView)findViewById(R.id.paymentAmount);
         paymentView.setText(totalReward);
         googlePayChargeClient = (GooglePayChargeClient) getLastCustomNonConfigurationInstance();
@@ -97,6 +105,25 @@ public class CheckoutActivity extends AppCompatActivity {
             ref = FirebaseDatabase.getInstance()
                     .getReference("listings").child(userName).child(location);
             ref.child("status").setValue("complete");
+
+            ref2 = FirebaseDatabase.getInstance().getReference("users").child(hunter);
+
+            ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    userclass = snapshot.getValue(UserClass.class);
+                    currentWalletVal = Double.valueOf(userclass.walletValue);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            });
+
+            ref2.child("walletValue").setValue(Double.toString(Double.valueOf(totalReward) + currentWalletVal));
+
             finish();
         });
 

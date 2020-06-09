@@ -10,6 +10,7 @@ public class UserClass {
     public String pass;
     public String age;
     public Boolean hunter;
+    public String walletValue = "0";
 
     public UserClass() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

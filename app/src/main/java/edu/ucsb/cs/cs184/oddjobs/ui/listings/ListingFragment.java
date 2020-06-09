@@ -89,6 +89,7 @@ public class ListingFragment extends Fragment {
                             i.putExtra("name", l.name);
                             i.putExtra("loc", l.location);
                             i.putExtra("posting", postingDescriptor);
+                            i.putExtra("hunter",l.acceptedby);
                             Log.d("GOING TO CHECKOUT", String.valueOf(l.payment));
                             Log.d("GOING TO CHECKOUT",l.name);
                             startActivity(i);
