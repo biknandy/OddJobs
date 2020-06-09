@@ -95,4 +95,9 @@ public class SignInActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 }
