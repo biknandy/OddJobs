@@ -5,6 +5,20 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/urgentViewC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@android:drawable/stat_sys_warning"
+        android:drawableTint="@color/quantum_googyellow300"
+        android:text="Urgent"
+        android:textColor="@color/quantum_googyellow300"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listingDes" />
+
+    <TextView
         android:id="@+id/listingPayCon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,11 +47,12 @@
 
     <TextView
         android:id="@+id/listingTitleCont"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
+        android:maxLines="4"
         android:text="Title"
         android:textSize="24sp"
         android:textStyle="bold"

@@ -31,10 +31,17 @@ public class BountyListingAdapter extends ArrayAdapter<Listing> {
         TextView listingTitle = (TextView) convertView.findViewById(R.id.listingTitle);
         TextView payout = (TextView) convertView.findViewById(R.id.listingPayout);
         TextView desc = (TextView) convertView.findViewById(R.id.listingDesB);
+        TextView urg = (TextView) convertView.findViewById(R.id.urgentView);
         // Populate the data into the template view using the data object
         listingTitle.setText(l.title);
         payout.setText("$" + l.payment + "0");
         desc.setText(l.descrip);
+
+        if (!l.urgent){
+            urg.setVisibility(View.GONE);
+        } else {
+            urg.setVisibility(View.VISIBLE);
+        }
         // Return the completed view to render on screen
         return convertView;
     }

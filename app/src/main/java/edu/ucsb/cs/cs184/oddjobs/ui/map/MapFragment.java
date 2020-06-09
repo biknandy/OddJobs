@@ -262,7 +262,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                         Listing l = postSnapshot.getValue(Listing.class);
                         LatLng pos = new LatLng(Double.valueOf(l.lat), Double.valueOf(l.longitude));
-                        googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
+                        if (!(l.status.equals("complete"))){
+                            googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
+                        }
+
                     }
 
                 }

@@ -61,6 +61,8 @@ public class FormActivity extends AppCompatActivity {
                 Double paymentNum = Double.parseDouble(payment.getText().toString());
                 Boolean urg = urgent.isChecked();
 
+                Log.d("urgent", urg.toString());
+
 
 
                 Listing listing = new Listing(name,

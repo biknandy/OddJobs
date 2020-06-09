@@ -35,10 +35,18 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
         TextView status = (TextView) convertView.findViewById(R.id.listingStatus);
         TextView payment = (TextView) convertView.findViewById(R.id.listingPayCon);
         TextView descrip = (TextView) convertView.findViewById(R.id.listingDes);
+        TextView urg = (TextView) convertView.findViewById(R.id.urgentViewC);
+
         // Populate the data into the template view using the data object
         listingTitle.setText(l.title);
         descrip.setText(l.descrip);
         payment.setText("$" + l.payment + "0");
+
+        if (!l.urgent){
+            urg.setVisibility(View.GONE);
+        } else {
+            urg.setVisibility(View.VISIBLE);
+        }
 
 
         if (l.status.equals("inprogress")){
@@ -49,7 +57,10 @@ public class ContractListingAdapter extends ArrayAdapter<Listing> {
             status.setTextColor(Color.parseColor("#dc3545"));
         } else {
             status.setText("Completed");
+            urg.setVisibility(View.GONE);
         }
+
+
 
         // Return the completed view to render on screen
         return convertView;
