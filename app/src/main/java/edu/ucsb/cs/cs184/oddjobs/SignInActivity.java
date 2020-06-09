@@ -3,9 +3,11 @@ package edu.ucsb.cs.cs184.oddjobs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -61,7 +63,16 @@ public class SignInActivity extends AppCompatActivity {
                                 intent.putExtra("utype", userType);
                                 intent.putExtra("money", "$" + money+"0");
                                 startActivity(intent);
+                            } else {
+                                Toast toast = Toast.makeText(getApplicationContext(), "Incorrect Login", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.BOTTOM, 0, 400);
+                                toast.show();
+
                             }
+                        } else {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Incorrect Login", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 400);
+                            toast.show();
                         }
                     }
 
