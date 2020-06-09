@@ -28,6 +28,7 @@ import java.util.List;
 
 import edu.ucsb.cs.cs184.oddjobs.AcceptPostActivity;
 import edu.ucsb.cs.cs184.oddjobs.BountyListingAdapter;
+import edu.ucsb.cs.cs184.oddjobs.CheckoutActivity;
 import edu.ucsb.cs.cs184.oddjobs.ContractListingAdapter;
 import edu.ucsb.cs.cs184.oddjobs.Listing;
 import edu.ucsb.cs.cs184.oddjobs.MainActivity;
@@ -81,14 +82,15 @@ public class ListingFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
                             Listing l = (Listing) adapter.getItemAtPosition(position);
-                            //start ACCEPTPOST activity here
 
                             String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
-                            Intent i = new Intent(getActivity(), AcceptPostActivity.class);
+                            Intent i = new Intent(getActivity(), CheckoutActivity.class);
+                            i.putExtra("price", l.payment);
+                            i.putExtra("name", l.name);
                             i.putExtra("loc", l.location);
-                            i.putExtra("lat", l.lat);
-                            i.putExtra("long", l.longitude);
                             i.putExtra("posting", postingDescriptor);
+                            Log.d("GOING TO CHECKOUT", String.valueOf(l.payment));
+                            Log.d("GOING TO CHECKOUT",l.name);
                             startActivity(i);
 
                         }
@@ -142,6 +144,7 @@ public class ListingFragment extends Fragment {
                             i.putExtra("lat", l.lat);
                             i.putExtra("long", l.longitude);
                             i.putExtra("posting", postingDescriptor);
+                            
                             startActivity(i);
 
                         }

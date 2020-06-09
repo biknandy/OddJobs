@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/order_sheet_padding"
+      >
+
+    <ImageButton
+        android:id="@+id/close_sheet_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/button_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm Payment"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/close_sheet_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/close_sheet_button" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_info_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/order_sheet_info_horizontal_padding"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_info_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/order_sheet_info_horizontal_padding"
+        />
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/column_separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="8dp" />
+
+
+    <View
+        android:id="@+id/ship_separator"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/sheetSeparatorHeight"
+        android:layout_marginTop="24dp"
+        android:background="@color/colorSheetSeparator"
+        app:layout_constraintEnd_toStartOf="@id/right_info_guide"
+        app:layout_constraintStart_toStartOf="@id/left_info_guide"
+        />
+
+
+    <View
+        android:id="@+id/price_separator"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/sheetSeparatorHeight"
+        android:background="@color/colorSheetSeparator"
+        app:layout_constraintEnd_toStartOf="@id/right_info_guide"
+        app:layout_constraintStart_toStartOf="@id/left_info_guide"
+        tools:layout_editor_absoluteY="87dp" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/button_middle_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        />
+
+    <Button
+        android:id="@+id/pay_with_card_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="103dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/pay_with_card"
+        app:layout_constraintEnd_toStartOf="@id/button_middle_guide"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_separator" />
+
+    <ImageButton
+        android:id="@+id/pay_with_google_button"
+        style="@style/CustomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/google_pay_button"
+        android:enabled="false"
+        android:src="@drawable/google_pay_logo_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_middle_guide"
+        app:layout_constraintTop_toTopOf="@id/pay_with_card_button"
+        />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

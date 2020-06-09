@@ -32,8 +32,8 @@ public class AcceptPostActivity extends AppCompatActivity {
     public String phone;
     public String reward;
     public String textMessage;
-    private Double lat;
-    private Double longitude;
+    private String lat;
+    private String longitude;
     private Listing l;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
     private DatabaseReference ref;
@@ -53,8 +53,8 @@ public class AcceptPostActivity extends AppCompatActivity {
         setContentView(R.layout.form_acceptance);
         currentIntent = getIntent();
         postDetails =  currentIntent.getStringExtra("posting");
-        lat = currentIntent.getDoubleExtra("lat", 0.0);
-        longitude = currentIntent.getDoubleExtra("long", 0.0);
+        lat = currentIntent.getStringExtra("lat");
+        longitude = currentIntent.getStringExtra("long");
         
         titleView = (TextView) findViewById(R.id.titleAccept);
         desView = (TextView) findViewById(R.id.descripAccept);
