@@ -19,6 +19,7 @@ public class SignInActivity extends AppCompatActivity {
     public static String username = "";
     public static Boolean userType;
     public static String phone;
+    public static String money;
 
     private EditText user;
     private EditText pass;
@@ -52,11 +53,13 @@ public class SignInActivity extends AppCompatActivity {
                                 username = user.getText().toString();
                                 userType = snapshot.child(username).child("hunter").getValue(Boolean.class);
                                 phone = snapshot.child(username).child("phone").getValue(String.class);
+                                money = snapshot.child(username).child("walletValue").getValue(String.class);
 
                                 Intent intent =  new Intent(SignInActivity.this,MainActivity.class);
                                 intent.putExtra("uname", username);
                                 intent.putExtra("phone", phone);
                                 intent.putExtra("utype", userType);
+                                intent.putExtra("money", "$" + money+"0");
                                 startActivity(intent);
                             }
                         }

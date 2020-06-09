@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,6 +23,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.w3c.dom.Text;
+
 import edu.ucsb.cs.cs184.oddjobs.ui.map.MapFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     public static String uname;
     public static String phone;
     public static Boolean utype;
+    public static String money;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +44,34 @@ public class MainActivity extends AppCompatActivity {
         uname = i.getStringExtra("uname");
         phone = i.getStringExtra("phone");
         utype = i.getBooleanExtra("utype", false);
+        money = i.getStringExtra("money");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
+
+
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+
+        TextView userView = (TextView) header.findViewById(R.id.userView);
+        userView.setText(uname);
+
+        TextView utypeView = (TextView) header.findViewById(R.id.textView);
+        TextView moneyView = (TextView) header.findViewById(R.id.moneyView);
+        if (!utype) {
+            utypeView.setText("Create a new Listing!");
+            moneyView.setVisibility(View.GONE);
+        } else {
+            utypeView.setText("Bounty Hunter Status");
+            moneyView.setText("Bank: " + money);
+            moneyView.setVisibility(View.VISIBLE);
+        }
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -62,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
     }
 
     @Override
