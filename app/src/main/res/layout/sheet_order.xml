@@ -69,7 +69,6 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/sheetSeparatorHeight"
         android:layout_marginTop="24dp"
-        android:background="@color/colorSheetSeparator"
         app:layout_constraintEnd_toStartOf="@id/right_info_guide"
         app:layout_constraintStart_toStartOf="@id/left_info_guide"
         />
@@ -79,7 +78,6 @@
         android:id="@+id/price_separator"
         android:layout_width="0dp"
         android:layout_height="@dimen/sheetSeparatorHeight"
-        android:background="@color/colorSheetSeparator"
         app:layout_constraintEnd_toStartOf="@id/right_info_guide"
         app:layout_constraintStart_toStartOf="@id/left_info_guide"
         tools:layout_editor_absoluteY="87dp" />
