@@ -112,7 +112,7 @@ public class ListingFragment extends Fragment {
 
                         for (DataSnapshot listing : postChildren) {
                             Listing l = listing.getValue(Listing.class);
-                            if (!l.status.equals("inprogress")){
+                            if (l.status.equals("incomplete")){
                                 listings.add(l);
                             }
                         }

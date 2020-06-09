@@ -285,7 +285,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             Listing l = listing.getValue(Listing.class);
                             LatLng pos = new LatLng(Double.valueOf(l.lat), Double.valueOf(l.longitude));
                             String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
-                            if (!(l.status.equals("inprogress"))){
+                            if ((l.status.equals("incomplete"))){
                                 googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
                                         .snippet(postingDescriptor)
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))).setTag("purple");
