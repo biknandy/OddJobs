@@ -50,7 +50,7 @@ public class CreateAccount extends AppCompatActivity {
                         phoneField.getText().toString(),
                         passField.getText().toString(),
                         ageField.getText().toString(),
-                        hunterBox.isChecked());
+                        hunterBox.isChecked(), "0.00");
 
                 db.child("users").child(unameField.getText().toString()).setValue(user);
                 Intent intent =  new Intent(CreateAccount.this,SignInActivity.class);

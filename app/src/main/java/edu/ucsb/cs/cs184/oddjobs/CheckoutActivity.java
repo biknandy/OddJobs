@@ -113,6 +113,7 @@ public class CheckoutActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot snapshot) {
                     userclass = snapshot.getValue(UserClass.class);
                     currentWalletVal = Double.valueOf(userclass.walletValue);
+                    ref2.child("walletValue").setValue(Double.toString(Double.valueOf(totalReward) + currentWalletVal));
                 }
 
                 @Override
@@ -121,8 +122,6 @@ public class CheckoutActivity extends AppCompatActivity {
                 }
 
             });
-
-            ref2.child("walletValue").setValue(Double.toString(Double.valueOf(totalReward) + currentWalletVal));
 
             finish();
         });
