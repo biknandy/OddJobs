@@ -49,8 +49,8 @@ public class CreateAccount extends AppCompatActivity {
                 UserClass user = new UserClass(unameField.getText().toString(),
                         phoneField.getText().toString(),
                         passField.getText().toString(),
-                        Integer.getInteger(ageField.getText().toString()),
-                        hunterBox.isChecked());
+                        ageField.getText().toString(),
+                        hunterBox.isChecked(), "0.00");
 
                 db.child("users").child(unameField.getText().toString()).setValue(user);
                 Intent intent =  new Intent(CreateAccount.this,SignInActivity.class);

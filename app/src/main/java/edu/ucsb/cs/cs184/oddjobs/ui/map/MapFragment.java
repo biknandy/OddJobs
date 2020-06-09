@@ -122,6 +122,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         super.onCreate(savedInstanceState);
 
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Map");
+
         db = FirebaseDatabase.getInstance();
 
         // Retrieve location and camera position from saved instance state.
@@ -259,8 +261,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 public void onDataChange(DataSnapshot snapshot) {
                     for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                         Listing l = postSnapshot.getValue(Listing.class);
-                        LatLng pos = new LatLng(l.lat, l.longitude);
-                        googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
+                        LatLng pos = new LatLng(Double.valueOf(l.lat), Double.valueOf(l.longitude));
+                        if (!(l.status.equals("complete"))){
+                            googleMap.addMarker(new MarkerOptions().position(pos).title(l.title).snippet(l.descrip)).setTag("red");
+                        }
+
                     }
 
                 }
@@ -281,12 +286,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
                         for (DataSnapshot listing : postChildren) {
                             Listing l = listing.getValue(Listing.class);
-                            LatLng pos = new LatLng(l.lat, l.longitude);
-                            String postingDescriptor = "location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact num: " + l.phone;
+                            LatLng pos = new LatLng(Double.valueOf(l.lat), Double.valueOf(l.longitude));
+                            String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
+                            if ((l.status.equals("incomplete"))){
+                                googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
+                                        .snippet(postingDescriptor)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))).setTag("purple");
+                            }
 
-                            googleMap.addMarker(new MarkerOptions().position(pos).title(l.title)
-                                    .snippet(postingDescriptor)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))).setTag("purple");
                         }
 
                     }
@@ -303,8 +310,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 public void onInfoWindowClick(Marker marker) {
                     Log.d("WIFOI","WINFO");
                     LatLng pos = marker.getPosition();
-                    Double latitude = pos.latitude;
-                    Double longitude = pos.longitude;
+                    String latitude = String.valueOf(pos.latitude);
+
+                    String longitude = String.valueOf(pos.longitude);
 
                     //get location of marker
                     String loc = marker.getTitle();
@@ -317,6 +325,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     i.putExtra("lat", latitude);
                     i.putExtra("long", longitude);
                     i.putExtra("posting", marker.getSnippet());
+                    Log.d("w0t",latitude);
+                    Log.d("w0t",longitude);
                     startActivity(i);
 
                 }
@@ -562,8 +572,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         if (marker.getTag() == "blue"){
             //grab position of marker
             LatLng pos = marker.getPosition();
-            Double latitude = pos.latitude;
-            Double longitude = pos.longitude;
+            String latitude = String.valueOf(pos.latitude);
+            String longitude = String.valueOf(pos.longitude);
 
             //get location of marker
             String loc = marker.getTitle();

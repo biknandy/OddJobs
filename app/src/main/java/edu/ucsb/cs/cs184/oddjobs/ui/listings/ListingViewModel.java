@@ -1,14 +1,14 @@
-package edu.ucsb.cs.cs184.oddjobs.ui.gallery;
+package edu.ucsb.cs.cs184.oddjobs.ui.listings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class ListingViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public ListingViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }

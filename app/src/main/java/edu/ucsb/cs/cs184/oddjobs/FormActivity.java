@@ -49,8 +49,8 @@ public class FormActivity extends AppCompatActivity {
             public void onClick (View v){
                 Intent i = getIntent();
 
-                Double lat = i.getDoubleExtra("lat", 0.0);
-                Double longitude = i.getDoubleExtra("long", 0.0);
+                String lat = i.getStringExtra("lat");
+                String longitude = i.getStringExtra("long");
                 String loc = i.getStringExtra("loc");
                 String name = i.getStringExtra("name");
                 String phone = i.getStringExtra("phone");
@@ -61,11 +61,15 @@ public class FormActivity extends AppCompatActivity {
                 Double paymentNum = Double.parseDouble(payment.getText().toString());
                 Boolean urg = urgent.isChecked();
 
+                Log.d("urgent", urg.toString());
+
 
 
                 Listing listing = new Listing(name,
                         phone,
                         titleText, descriptionText, loc, paymentNum.toString(), lat, longitude, urg);
+//                Log.d("DEBUG",lat);
+//                Log.d("DEBUG",longitude);
 
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 

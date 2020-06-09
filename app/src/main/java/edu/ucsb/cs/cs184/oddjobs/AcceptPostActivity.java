@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -17,8 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AcceptPostActivity extends AppCompatActivity {
     public Intent currentIntent;
@@ -28,7 +32,20 @@ public class AcceptPostActivity extends AppCompatActivity {
     public String phone;
     public String reward;
     public String textMessage;
+    private String lat;
+    private String longitude;
+    private Listing l;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
+    private DatabaseReference ref;
+    private DatabaseReference ref2;
+    private String age;
+    
+    private TextView titleView;
+    private TextView desView;
+    private TextView locView;
+    private TextView payView;
+    private TextView nameView;
+    private TextView ageView;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -36,35 +53,86 @@ public class AcceptPostActivity extends AppCompatActivity {
         setContentView(R.layout.form_acceptance);
         currentIntent = getIntent();
         postDetails =  currentIntent.getStringExtra("posting");
-        TextView tv = (TextView) findViewById(R.id.PostView);
-        tv.setText(postDetails);
+        lat = currentIntent.getStringExtra("lat");
+        longitude = currentIntent.getStringExtra("long");
+        
+        titleView = (TextView) findViewById(R.id.titleAccept);
+        desView = (TextView) findViewById(R.id.descripAccept);
+        locView = (TextView) findViewById(R.id.locAccept);
+        payView = (TextView) findViewById(R.id.payAccept);
+        nameView = (TextView) findViewById(R.id.nameAccept);
+        ageView = (TextView) findViewById(R.id.ageAccept);
+        //tv.setText(postDetails);
+        
+        
+        String[] splitar = postDetails.split(",");
+        loc = (splitar[0].split(": ")[1]).replaceAll("\\s", "");
+        name = splitar[3].split(": ")[1];
+        
+        ref = FirebaseDatabase.getInstance()
+                .getReference("listings").child(name).child(loc);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                l = snapshot.getValue(Listing.class);
+                titleView.setText(l.title);
+                desView.setText(l.descrip);
+                locView.setText(l.location);
+                payView.setText("$" + l.payment + "0");
+                payView.setTextColor(Color.parseColor("#28a745"));
+                nameView.setText(l.name);
+
+
+                Button contact = (Button)findViewById(R.id.contactButton);
+                contact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:"+l.phone));
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+        
+        
+        ref2 = FirebaseDatabase.getInstance()
+                .getReference("users").child(name).child("age");
+        
+        ref2.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot ageShot) {
+                age = ageShot.getValue().toString();
+                ageView.setText(age);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }); 
 
         Button accept= (Button)findViewById(R.id.AcceptButton);
 
         accept.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                
+                ref.child("acceptedby").setValue(MainActivity.uname);
+                ref.child("status").setValue("inprogress");
 
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                String[] splitar = postDetails.split(",");
-                loc = splitar[0].split(": ")[1];
-                name = splitar[3].split(": ")[1];
-                phone = splitar[4].split(": ")[1];
-                reward = splitar[2].split(": ")[1];
-                textMessage = "Hi, my name is " + MainActivity.uname +", a bounty hunter, I have accepted your posting at: " + loc + " for the reward amount: " + reward;
-
-
-                Log.d("SPLITAR",name);
-                Log.d("SPLITAR",loc);
-                Log.d("SPLITAR",phone);
-                Log.d("SPLITAR",reward);
-                Log.d("SPLITAR",textMessage);
-
-
-
-                //sendSMS();
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(phone, null, textMessage, null, null);
-                ref.child("listings").child(name).child(loc).child("acceptedby").setValue(MainActivity.uname);
+                //OPEN GOOGLE MAPS
+                // Creates an Intent that will load a map of San Francisco
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
 
                 finish();
             }
@@ -78,6 +146,25 @@ public class AcceptPostActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    protected void sendSMS(Listing l, String message) {
+        Log.i("Send SMS", "");
+        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+        //phone = "";
+        smsIntent.setDataAndType(Uri.parse("smsto:"), "vnd.android-dir/mms-sms");
+        //smsIntent.setType("vnd.android-dir/mms-sms");
+        smsIntent.putExtra("address"  , l.phone);
+        smsIntent.putExtra("sms_body"  , message);
+
+        try{
+            startActivity(smsIntent);
+            finish();
+            Log.i("Finished sending SMS...", "");
+        } catch (android.content.ActivityNotFoundException ex) {
+
+        }
     }
 
 

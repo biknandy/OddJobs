@@ -3,9 +3,11 @@ package edu.ucsb.cs.cs184.oddjobs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +21,7 @@ public class SignInActivity extends AppCompatActivity {
     public static String username = "";
     public static Boolean userType;
     public static String phone;
+    public static String money;
 
     private EditText user;
     private EditText pass;
@@ -52,13 +55,24 @@ public class SignInActivity extends AppCompatActivity {
                                 username = user.getText().toString();
                                 userType = snapshot.child(username).child("hunter").getValue(Boolean.class);
                                 phone = snapshot.child(username).child("phone").getValue(String.class);
+                                money = snapshot.child(username).child("walletValue").getValue(String.class);
 
                                 Intent intent =  new Intent(SignInActivity.this,MainActivity.class);
                                 intent.putExtra("uname", username);
                                 intent.putExtra("phone", phone);
                                 intent.putExtra("utype", userType);
+                                intent.putExtra("money", "$" + money+"0");
                                 startActivity(intent);
+                            } else {
+                                Toast toast = Toast.makeText(getApplicationContext(), "Incorrect Login", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.BOTTOM, 0, 400);
+                                toast.show();
+
                             }
+                        } else {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Incorrect Login", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 400);
+                            toast.show();
                         }
                     }
 
@@ -91,5 +105,10 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
     }
 }
