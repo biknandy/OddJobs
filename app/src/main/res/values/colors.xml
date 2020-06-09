@@ -26,7 +26,7 @@
     <color name="colorButtonBackgroundPressed">@color/colorPrimaryDark</color>
 
     <!-- Cookie Activity -->
-    <color name="colorCookieActivityBackground">#343a40</color>
+    <color name="colorCookieActivityBackground">#121212</color>
     <color name="colorCookieActivityTextColor">@color/white</color>
 
     <!-- Order Sheet -->
