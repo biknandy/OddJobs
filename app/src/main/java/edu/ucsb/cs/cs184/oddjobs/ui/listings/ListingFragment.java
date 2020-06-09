@@ -46,13 +46,6 @@ public class ListingFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_listings, container, false);
 
         listings = new ArrayList<>();
-        //final TextView textView = root.findViewById(R.id.text_gallery);
-//        listingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Listings");
 
@@ -83,16 +76,18 @@ public class ListingFragment extends Fragment {
                         public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
                             Listing l = (Listing) adapter.getItemAtPosition(position);
 
-                            String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
-                            Intent i = new Intent(getActivity(), CheckoutActivity.class);
-                            i.putExtra("price", l.payment);
-                            i.putExtra("name", l.name);
-                            i.putExtra("loc", l.location);
-                            i.putExtra("posting", postingDescriptor);
-                            i.putExtra("hunter",l.acceptedby);
-                            Log.d("GOING TO CHECKOUT", String.valueOf(l.payment));
-                            Log.d("GOING TO CHECKOUT",l.name);
-                            startActivity(i);
+                            if (l.status.equals("inprogress")) {
+                                String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
+                                Intent i = new Intent(getActivity(), CheckoutActivity.class);
+                                i.putExtra("price", l.payment);
+                                i.putExtra("name", l.name);
+                                i.putExtra("loc", l.location);
+                                i.putExtra("posting", postingDescriptor);
+                                i.putExtra("hunter", l.acceptedby);
+                                Log.d("GOING TO CHECKOUT", String.valueOf(l.payment));
+                                Log.d("GOING TO CHECKOUT", l.name);
+                                startActivity(i);
+                            }
 
                         }
                     });
@@ -145,7 +140,7 @@ public class ListingFragment extends Fragment {
                             i.putExtra("lat", l.lat);
                             i.putExtra("long", l.longitude);
                             i.putExtra("posting", postingDescriptor);
-                            
+
                             startActivity(i);
 
                         }
