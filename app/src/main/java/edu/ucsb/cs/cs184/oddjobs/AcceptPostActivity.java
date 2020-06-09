@@ -82,6 +82,17 @@ public class AcceptPostActivity extends AppCompatActivity {
                 payView.setText("$" + l.payment + "0");
                 payView.setTextColor(Color.parseColor("#28a745"));
                 nameView.setText(l.name);
+
+
+                Button contact = (Button)findViewById(R.id.contactButton);
+                contact.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:"+l.phone));
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
@@ -134,15 +145,7 @@ public class AcceptPostActivity extends AppCompatActivity {
                 finish();
             }
         });
-        
-        Button contact = (Button)findViewById(R.id.contactButton);
-        contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textMessage = "Hi, my name is " + MainActivity.uname +", a bounty hunter, I have accepted your posting at: " + l.location + " for the reward amount: " + l.payment;
-                sendSMS(l, textMessage);
-            }
-        });
+
 
     }
 
