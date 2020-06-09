@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             utypeView.setText("Create a new Listing!");
             moneyView.setVisibility(View.GONE);
         } else {
-            utypeView.setText("Bounty Hunter Status");
+            utypeView.setText("Bounty Hunter");
             moneyView.setText("Bank: " + money);
             moneyView.setVisibility(View.VISIBLE);
         }

@@ -127,7 +127,7 @@ public class ListingFragment extends Fragment {
                     Log.d("Test", listings.toString());
 
                     // Create the adapter to convert the array to views
-                    BountyListingAdapter adapter = new BountyListingAdapter(getActivity(), listings);
+                    BountyListingAdapter adapter = new BountyListingAdapter(root.getContext(), listings);
                     //adapter.addAll(listings);
                     // Attach the adapter to a ListView
                     lView = (ListView) root.findViewById(R.id.listingList);
@@ -140,7 +140,7 @@ public class ListingFragment extends Fragment {
                             //start ACCEPTPOST activity here
 
                             String postingDescriptor = "Location: " + l.location + ",\nDescription: " + l.descrip + ",\nReward: $" + l.payment + ",\nListed By: " + l.name + ",\nContact: " + l.phone;
-                            Intent i = new Intent(getActivity(), AcceptPostActivity.class);
+                            Intent i = new Intent(root.getContext(), AcceptPostActivity.class);
                             i.putExtra("loc", l.location);
                             i.putExtra("lat", l.lat);
                             i.putExtra("long", l.longitude);
