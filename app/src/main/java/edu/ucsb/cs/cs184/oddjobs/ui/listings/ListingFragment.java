@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +47,9 @@ public class ListingFragment extends Fragment {
                 ViewModelProviders.of(this).get(ListingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_listings, container, false);
 
-
+        //hide FAB
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.hide();
 
 
         listings = new ArrayList<>();
